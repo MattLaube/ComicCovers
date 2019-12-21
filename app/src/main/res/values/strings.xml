@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Yo Gamma Gamma</string>
+    <string name="description">Description</string>
+    <string name="load_issue">Load Issue</string>
+    <string-array name="issue_list">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>
