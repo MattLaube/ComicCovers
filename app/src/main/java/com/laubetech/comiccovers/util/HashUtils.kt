@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException
 
 
 object HashUtils {
-    fun MD5(md5: String): String? {
+    fun md5(md5: String): String? {
         try {
             val md = MessageDigest.getInstance("MD5")
             val array = md.digest(md5.toByteArray())
