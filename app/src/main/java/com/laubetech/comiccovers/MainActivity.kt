@@ -6,8 +6,6 @@ import com.laubetech.comiccovers.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
-    var characterId = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)

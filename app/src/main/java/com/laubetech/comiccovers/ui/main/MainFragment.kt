@@ -32,20 +32,25 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        // get an instance of the viewmodel
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
+        //load the spinner from the strings file
         val issueListAdapter = ArrayAdapter.createFromResource(this.requireContext(), R.array.issue_list, android.R.layout.simple_spinner_dropdown_item)
         issueListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         issueListspinner.adapter = issueListAdapter
 
+        // go button kicks off the data request, but we could just use the spinners onselected method
         goButton.setOnClickListener{ view -> viewModel.goButton(issueListspinner.selectedItemId); }
 
+        //setting up observers to handle when data is changed
         viewModel.reloadImage.observe(this, Observer { loadComicCover(viewModel.currentImageName.value ) })
         viewModel.currentComicData.observe(this, Observer { comicDetailsTextView.text =  viewModel.currentComicData.value.toString()
             viewModel.startImageDownload(this.context, viewModel.currentComicData.value!!.coverLink, viewModel.currentComicData.value!!.coverImageName )
         })
     }
 
+    // load a given file from storage or fall back to the starting image
     private fun loadComicCover(imageName: String? ){
         if (imageName.isNullOrBlank()) {
             loadDefualtComicCover()
