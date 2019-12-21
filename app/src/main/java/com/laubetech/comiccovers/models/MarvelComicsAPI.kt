@@ -7,6 +7,7 @@ import com.laubetech.comiccovers.ui.main.MainViewModel
 import com.laubetech.comiccovers.util.HashUtils
 import okhttp3.*
 import java.io.*
+import java.lang.Exception
 
 /**]
  * A class to handle connecting to the Marvel APIs.  I use pure OKHTTP here even if its a little more
@@ -15,6 +16,8 @@ import java.io.*
 class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
     private var publicKey:String = ""
     private var privateKey:String = ""
+    private val logTag = "MarvelComicsAPI"
+
 
     init  {
         this.publicKey = publicKey
@@ -88,21 +91,25 @@ class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
             override fun onResponse(call: Call, response: Response) {
                 val responseData = response.code.toString() + ":" + response.message
 
-                // there is a trick here, use .body.string() not body.toString()
-                val data = response.body!!.string()
-                val gson = Gson()
-
-                val marvelData:MarvelResponse = gson.fromJson(data)
-
-                Log.e("ServerResponse", responseData)
                 if (response.code == 200) {
-                    val comicData = ComicData(marvelData)
-                    Log.e("ServerResponse",comicData.toString() )
-                    viewModel.currentComicData.postValue(comicData)
+                    try {
+                        // there is a trick here, use .body.string() not body.toString()
+                        val data = response.body!!.string()
+                        val gson = Gson()
+
+                        val marvelData: MarvelResponse = gson.fromJson(data)
+                        Log.d(logTag, responseData)
+
+                        val comicData = ComicData(marvelData)
+                        Log.d(logTag, comicData.toString())
+                        viewModel.currentComicData.postValue(comicData)
+                    }catch(exception:Exception){
+                        Log.e(logTag,"Exception in response ${exception.localizedMessage}")
+                    }
                 }
             }
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("ServerResponse","Request Failure." + e.localizedMessage)
+                Log.e("ServerResponse","Request Failure ${e.localizedMessage}")
             }
         })
     }
