@@ -13,6 +13,7 @@
         android:layout_height="60dp"
         android:text="@string/load_issue"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.017"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,7 +24,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goButton" />
+        app:layout_constraintTop_toBottomOf="@+id/goButton"
+        app:layout_constraintVertical_bias="0.194" />
 
     <TextView
         android:id="@+id/comicDetailsTextView"
@@ -38,10 +40,12 @@
 
     <Spinner
         android:id="@+id/issueListspinner"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="175dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toEndOf="@+id/goButton"
         app:layout_constraintTop_toTopOf="parent" />
 

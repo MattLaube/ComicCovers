@@ -3,8 +3,25 @@
     <string name="description">Description</string>
     <string name="load_issue">Load Issue</string>
     <string-array name="issue_list">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+        <item>Issue #28 V</item>
+        <item>Issue #28</item>
+        <item>Issue #27 V</item>
+        <item>Issue #27</item>
+        <item>Issue #26</item>
+        <item>Issue #25 V1</item>
+        <item>Issue #25 V2</item>
+        <item>Issue #25 V3</item>
+        <item>Issue #25</item>
+        <item>Issue #25 V4</item>
+        <item>Issue #25 V5</item>
+        <item>Issue #25 V6</item>
+        <item>Issue #25 V7</item>
+        <item>Issue #25 V8</item>
+        <item>Issue #24</item>
+        <item>Issue #24 V</item>
+        <item>Issue #23</item>
+        <item>Issue #23 V</item>
+        <item>Issue #22</item>
+        <item>Issue #22 V</item>
     </string-array>
 </resources>

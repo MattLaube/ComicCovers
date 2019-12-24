@@ -9,19 +9,15 @@ import com.laubetech.comiccovers.models.ComicData
 import com.laubetech.comiccovers.models.MarvelComicsAPI
 
 class MainViewModel : ViewModel() {
-    private var _reloadImage = MutableLiveData<Boolean>()
-    val reloadImage :LiveData<Boolean>
-        get() = _reloadImage
+    var reloadImage = MutableLiveData<Boolean>()
 
-    private var _currentImageName = MutableLiveData<String>()
-    val currentImageName : LiveData<String>
-        get() = _currentImageName
+    var currentImageName = MutableLiveData<String>()
 
     var currentComicData = MutableLiveData<ComicData>()
 
     init {
-        _reloadImage.value = false
-        _currentImageName.value = "image.jpg"
+        reloadImage.value = false
+        currentImageName.value = "image.jpg"
     }
 
     fun goButton( selectedComic:Long){
@@ -35,16 +31,33 @@ class MainViewModel : ViewModel() {
     }
 
     fun updateImage(newImageName:String){
-        _currentImageName.postValue(newImageName)
+        currentImageName.postValue(newImageName)
         // this may happen on background thread, so do a postValue here
-        _reloadImage.postValue(true)
+        reloadImage.postValue(true)
     }
 
     private fun findIssueId(index:Long):String{
         return when(index){
-            0L -> "73821"
-            1L -> "73822"
-            2L -> "73823"
+            0L -> "83288"
+            1L -> "77342"
+            2L -> "82476"
+            3L -> "77341"
+            4L -> "77340"
+            5L -> "78799"
+            6L -> "81311"
+            7L -> "83517"
+            8L -> "77339"
+            9L -> "78318"
+            10L -> "78795"
+            11L -> "78796"
+            12L -> "78797"
+            13L -> "78798"
+            14L -> "73828"
+            15L -> "78317"
+            16L -> "73827"
+            17L -> "78245"
+            18L -> "73826"
+            19L -> "77663"
             else -> ""
 
         }

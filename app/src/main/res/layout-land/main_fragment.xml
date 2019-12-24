@@ -42,7 +42,7 @@
 
     <Spinner
         android:id="@+id/issueListspinner"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="172dp"
         android:layout_marginTop="30dp"
