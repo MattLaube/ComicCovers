@@ -1,5 +1,7 @@
 package com.laubetech.comiccovers.models
 
+import com.laubetech.comiccovers.models.response.MarvelResponse
+
 class ComicData(newData: MarvelResponse) {
     var coverLink : String = ""
     var issueTitle : String = ""
@@ -25,11 +27,10 @@ class ComicData(newData: MarvelResponse) {
     }
 
     // we store the coverImage with the id of the comic
-    private fun fetchCoverImageName(newData:MarvelResponse):String{
+    private fun fetchCoverImageName(newData: MarvelResponse):String{
         return newData.data.results[0].id.toString()
     }
 
-    @Override
     override fun toString(): String {
         return "$issueTitle $issueLength Pages"
     }

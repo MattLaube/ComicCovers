@@ -3,7 +3,7 @@ package com.laubetech.comiccovers
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.laubetech.comiccovers.models.ComicData
-import com.laubetech.comiccovers.models.MarvelResponse
+import com.laubetech.comiccovers.models.response.MarvelResponse
 import junit.framework.Assert.assertTrue
 import org.junit.Test
 
@@ -15,7 +15,7 @@ class ComicDataTest {
     fun testComicData(){
         //build out some test data
         val gson = Gson()
-        val marvelData:MarvelResponse = gson.fromJson(testJSON)
+        val marvelData: MarvelResponse = gson.fromJson(testJSON)
         val testComicData = ComicData(marvelData)
 
         val testOutput = testComicData.toString()

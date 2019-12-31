@@ -3,6 +3,7 @@ package com.laubetech.comiccovers.models
 import android.util.Log
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
+import com.laubetech.comiccovers.models.response.MarvelResponse
 import com.laubetech.comiccovers.ui.main.MainViewModel
 import com.laubetech.comiccovers.util.HashUtils
 import okhttp3.*

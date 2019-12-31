@@ -18,6 +18,8 @@ class MainViewModel : ViewModel() {
     init {
         reloadImage.value = false
         currentImageName.value = "image.jpg"
+
+
     }
 
     fun goButton( selectedComic:Long){
