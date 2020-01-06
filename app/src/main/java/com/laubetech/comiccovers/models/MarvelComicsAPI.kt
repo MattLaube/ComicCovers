@@ -3,6 +3,7 @@ package com.laubetech.comiccovers.models
 import android.util.Log
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
+import com.laubetech.comiccovers.ComicApp
 import com.laubetech.comiccovers.models.response.MarvelResponse
 import com.laubetech.comiccovers.ui.main.MainViewModel
 import com.laubetech.comiccovers.util.HashUtils
@@ -26,7 +27,7 @@ class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
     }
 
     fun fetchImage(url:String, size:String, extension:String, fileLocation:File, fileName:String,viewModel: MainViewModel ){
-        var updatedUrl:String
+        val updatedUrl:String
         if(url.startsWith("http:",true)){
             updatedUrl = url.replace("http:","https:")
         }else{
@@ -104,6 +105,7 @@ class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
                         val comicData = ComicData(marvelData)
                         Log.d(logTag, comicData.toString())
                         viewModel.currentComicData.postValue(comicData)
+                        ComicApp.appDatabase.comicDao().insertComic(comicData.toComic())
                     }catch(exception:Exception){
                         Log.e(logTag,"Exception in response ${exception.localizedMessage}")
                     }

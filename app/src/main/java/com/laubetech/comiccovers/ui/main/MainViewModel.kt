@@ -5,27 +5,45 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.laubetech.comiccovers.BuildConfig
+import com.laubetech.comiccovers.ComicApp
 import com.laubetech.comiccovers.models.ComicData
 import com.laubetech.comiccovers.models.MarvelComicsAPI
+import com.laubetech.comiccovers.models.data.Comic
+import com.laubetech.comiccovers.models.data.ComicDatabase
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
-class MainViewModel : ViewModel() {
+class MainViewModel() : ViewModel() {
     var reloadImage = MutableLiveData<Boolean>()
 
     var currentImageName = MutableLiveData<String>()
 
     var currentComicData = MutableLiveData<ComicData>()
 
-    init {
+    var targetComic = MutableLiveData<Comic>()
+
+    private var lastComicId : Long = 0L
+
+    //fun targetComic(comicId: String) =  getValue( ComicApp.appDatabase.comicDao().findComic(comicId) )
+
+    init{
         reloadImage.value = false
         currentImageName.value = "image.jpg"
-
-
     }
 
     fun goButton( selectedComic:Long){
-        val apiRequest = MarvelComicsAPI(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY)
-        apiRequest.getSingleComic(findIssueId(selectedComic), this)
+        lastComicId = selectedComic
+        targetComic.value = this.getValue( ComicApp.appDatabase.comicDao().findComic(findIssueId(selectedComic)) )
+
+       // val apiRequest = MarvelComicsAPI(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY)
+       // apiRequest.getSingleComic(findIssueId(selectedComic), this)
     }
+
+    fun downloadIssueInfo(){
+        val apiRequest = MarvelComicsAPI(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY)
+        apiRequest.getSingleComic(findIssueId(lastComicId), this)
+    }
+
 
     fun startImageDownload(context:Context?, url:String, fileName:String){
         val apiRequest = MarvelComicsAPI(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY)
@@ -65,4 +83,24 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Helper method for testing LiveData objects, from
+     * https://github.com/googlesamples/android-architecture-components.
+     *
+     * Get the value from a LiveData object. We're waiting for LiveData to emit, for 2 seconds.
+     * Once we got a notification via onChanged, we stop observing.
+     */
+    @Throws(InterruptedException::class)
+    fun <T> getValue(liveData: LiveData<T>): T {
+        val data = arrayOfNulls<Any>(1)
+        val latch = CountDownLatch(1)
+        liveData.observeForever { o ->
+            data[0] = o
+            latch.countDown()
+        }
+        latch.await(2, TimeUnit.SECONDS)
+
+        @Suppress("UNCHECKED_CAST")
+        return data[0] as T
+    }
 }

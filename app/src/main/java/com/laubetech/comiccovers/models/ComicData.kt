@@ -1,17 +1,31 @@
 package com.laubetech.comiccovers.models
 
+import com.laubetech.comiccovers.models.data.Comic
 import com.laubetech.comiccovers.models.response.MarvelResponse
 
-class ComicData(newData: MarvelResponse) {
+class ComicData() {
     var coverLink : String = ""
     var issueTitle : String = ""
     var issueLength : Long = 0
     var coverImageName : String = ""
-    init{
+
+
+    constructor(newData: MarvelResponse) : this(){
         coverLink= fetchCoverLink(newData)
         issueTitle = fetchIssueTitle(newData)
         issueLength =  fetchIssueLength(newData)
         coverImageName = fetchCoverImageName(newData)
+
+    }
+
+    constructor(newData: Comic?): this(){
+        if (newData != null) {
+            coverImageName = newData.issueId
+            issueTitle = newData.issueTitle
+            issueTitle = newData.issueTitle
+        } else{
+            coverLink = "NA"
+        }
     }
 
     private fun fetchCoverLink(newData: MarvelResponse):String{
@@ -33,6 +47,11 @@ class ComicData(newData: MarvelResponse) {
 
     override fun toString(): String {
         return "$issueTitle $issueLength Pages"
+    }
+
+    fun toComic(): Comic{
+        val newComic = Comic(coverImageName,issueTitle, issueLength.toString())
+        return newComic
     }
 
 }
