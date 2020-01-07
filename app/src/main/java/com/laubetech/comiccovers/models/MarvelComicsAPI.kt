@@ -105,7 +105,8 @@ class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
                         val comicData = ComicData(marvelData)
                         Log.d(logTag, comicData.toString())
                         viewModel.currentComicData.postValue(comicData)
-                        ComicApp.appDatabase.comicDao().insertComic(comicData.toComic())
+                        viewModel.storeComic(comicData.toComic())
+                       // ComicApp.appDatabase.comicDao().insertComic(comicData.toComic())
                     }catch(exception:Exception){
                         Log.e(logTag,"Exception in response ${exception.localizedMessage}")
                     }

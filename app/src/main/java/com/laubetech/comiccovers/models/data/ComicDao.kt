@@ -8,9 +8,9 @@ import androidx.room.Query
 
 @Dao
 interface ComicDao{
-    @Query("Select * from Comic where issueId = (:comicId)")
-    fun findComic(comicId: String) : LiveData<Comic>
+    @Query("Select * from comic where issueId = :comicId")
+    fun findComic(comicId: String) : LiveData<List<Comic>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertComic( newComic: Comic)
+    fun insertComic(newComic: Comic)
 }

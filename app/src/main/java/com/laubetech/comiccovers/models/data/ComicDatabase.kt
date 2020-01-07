@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(Comic::class), version = 1)
+@Database(entities = arrayOf(Comic::class), version = 1, exportSchema = false)
 abstract class ComicDatabase : RoomDatabase(){
     abstract fun comicDao(): ComicDao
 
@@ -24,7 +24,7 @@ abstract class ComicDatabase : RoomDatabase(){
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ComicDatabase::class.java,
-                    "word_database"
+                    "comic_database"
                 ).build()
                 INSTANCE = instance
                 return instance

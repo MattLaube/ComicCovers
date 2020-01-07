@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.laubetech.comiccovers.R
-import com.laubetech.comiccovers.models.ComicData
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
 
@@ -46,21 +45,14 @@ class MainFragment : Fragment() {
 
         //setting up observers to handle when data is changed
         viewModel.reloadImage.observe(this, Observer { loadComicCover(viewModel.currentImageName.value ) })
+
         viewModel.currentComicData.observe(this, Observer { comicDetailsTextView.text =  viewModel.currentComicData.value.toString()
             viewModel.startImageDownload(this.context, viewModel.currentComicData.value!!.coverLink, viewModel.currentComicData.value!!.coverImageName )
         })
 
         viewModel.targetComic.observe(this, Observer {
-            if ( viewModel.targetComic.value == null){
-                viewModel.downloadIssueInfo()
-            }else {
-                var comicDetails = ComicData(viewModel.targetComic.value)
-                comicDetailsTextView.text = comicDetails.toString()
-                viewModel.updateImage(comicDetails.coverImageName)
-            }
+            comicDetailsTextView.text = viewModel.checkResults()
         })
-
-
     }
 
     // load a given file from storage or fall back to the starting image

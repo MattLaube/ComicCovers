@@ -3,13 +3,11 @@ package com.laubetech.comiccovers.models.data
 import androidx.lifecycle.LiveData
 
 class ComicRepository(private val comicDao: ComicDao){
-
-    suspend fun insert(comic: Comic){
+    fun insert(comic: Comic){
         comicDao.insertComic(comic)
     }
 
-    suspend fun find(comicId: String): LiveData<Comic>{
+    fun find(comicId: String): LiveData<List<Comic>>{
         return comicDao.findComic(comicId)
     }
-
 }
