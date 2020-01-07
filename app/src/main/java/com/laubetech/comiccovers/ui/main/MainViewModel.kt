@@ -37,9 +37,7 @@ class MainViewModel: ViewModel() {
         Log.d("MainViewModel","trying to load record id $lastComicId")
 
         val returnedList = repository.find(lastComicId)
-       // if (returnedList.value != null ){
-            targetComic.value = returnedList.value?.get(0)
-        //}
+        targetComic.value = returnedList.value?.get(0)
     }
 
     fun downloadIssueInfo(){
