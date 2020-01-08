@@ -1,28 +1,48 @@
 package com.laubetech.comiccovers.ui.main
 
 import android.content.Context
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.laubetech.comiccovers.BuildConfig
+import com.laubetech.comiccovers.ComicApp
 import com.laubetech.comiccovers.models.ComicData
 import com.laubetech.comiccovers.models.MarvelComicsAPI
+import com.laubetech.comiccovers.models.data.Comic
+import com.laubetech.comiccovers.models.data.ComicRepository
 
-class MainViewModel : ViewModel() {
+
+class MainViewModel: ViewModel() {
     var reloadImage = MutableLiveData<Boolean>()
 
     var currentImageName = MutableLiveData<String>()
 
     var currentComicData = MutableLiveData<ComicData>()
 
+    var targetComic  = MutableLiveData<Comic>()
+
+    private var lastComicId : String
+
+    private val repository : ComicRepository
+
     init {
         reloadImage.value = false
         currentImageName.value = "image.jpg"
+        lastComicId = ""
+        repository = ComicRepository(ComicApp.appDatabase.comicDao())
     }
 
     fun goButton( selectedComic:Long){
+        lastComicId = findIssueId(selectedComic)
+        Log.d("MainViewModel","trying to load record id $lastComicId")
+
+        val returnedList = repository.find(lastComicId)
+        targetComic.value = returnedList.value?.get(0)
+    }
+
+    fun downloadIssueInfo(){
         val apiRequest = MarvelComicsAPI(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY)
-        apiRequest.getSingleComic(findIssueId(selectedComic), this)
+        apiRequest.getSingleComic(lastComicId, this)
     }
 
     fun startImageDownload(context:Context?, url:String, fileName:String){
@@ -34,6 +54,22 @@ class MainViewModel : ViewModel() {
         currentImageName.postValue(newImageName)
         // this may happen on background thread, so do a postValue here
         reloadImage.postValue(true)
+    }
+
+    fun checkResults(): String{
+        val comicDetails = targetComic.value
+        if (comicDetails == null){
+            Log.d("MainViewModel","DB load failed, trying to load from server")
+            downloadIssueInfo()
+        }else {
+            updateImage(comicDetails!!.issueId)
+            return comicDetails.toString()
+        }
+        return ""
+    }
+
+    fun storeComic(comic: Comic){
+        repository.insert(comic)
     }
 
     private fun findIssueId(index:Long):String{
@@ -59,8 +95,6 @@ class MainViewModel : ViewModel() {
             18L -> "73826"
             19L -> "77663"
             else -> ""
-
         }
     }
-
 }

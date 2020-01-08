@@ -45,8 +45,13 @@ class MainFragment : Fragment() {
 
         //setting up observers to handle when data is changed
         viewModel.reloadImage.observe(this, Observer { loadComicCover(viewModel.currentImageName.value ) })
+
         viewModel.currentComicData.observe(this, Observer { comicDetailsTextView.text =  viewModel.currentComicData.value.toString()
             viewModel.startImageDownload(this.context, viewModel.currentComicData.value!!.coverLink, viewModel.currentComicData.value!!.coverImageName )
+        })
+
+        viewModel.targetComic.observe(this, Observer {
+            comicDetailsTextView.text = viewModel.checkResults()
         })
     }
 
