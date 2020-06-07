@@ -1,6 +1,8 @@
 package com.laubetech.comiccovers.models
 
+import android.telecom.Call
 import android.util.Log
+import com.amitshekhar.model.Response
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.laubetech.comiccovers.ComicApp
@@ -28,6 +30,9 @@ class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
 
     fun fetchImage(url:String, size:String, extension:String, fileLocation:File, fileName:String,viewModel: MainViewModel ){
         val updatedUrl:String
+        if (url.isBlank()){
+            return
+        }
         if(url.startsWith("http:",true)){
             updatedUrl = url.replace("http:","https:")
         }else{
@@ -41,7 +46,7 @@ class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
             .build()
 
         client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 val responseData = response.code.toString() + ":" + response.message
 
                 Log.e("ServerResponse", responseData)
@@ -61,7 +66,7 @@ class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
                 }
             }
 
-            override fun onFailure(call: Call, e: IOException) {
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
                 Log.e("ServerResponse", "Request Failure." + e.localizedMessage)
             }
         })
@@ -90,7 +95,7 @@ class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
             .build()
 
         client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 val responseData = response.code.toString() + ":" + response.message
 
                 if (response.code == 200) {
@@ -111,7 +116,7 @@ class MarvelComicsAPI constructor(publicKey:String, privateKey:String){
                     }
                 }
             }
-            override fun onFailure(call: Call, e: IOException) {
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
                 Log.e("ServerResponse","Request Failure ${e.localizedMessage}")
             }
         })

@@ -29,6 +29,8 @@ android {
         }
     }
 }
+def retrofitVersion = '2.3.0'
+def rxJavaVersion = '2.1.1'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -55,4 +57,13 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:2.2.3"
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
     debugImplementation 'com.amitshekhar.android:debug-db-encrypt:1.0.6'
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
+
+
 }

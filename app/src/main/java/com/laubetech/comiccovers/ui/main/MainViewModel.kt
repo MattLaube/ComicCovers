@@ -7,9 +7,15 @@ import androidx.lifecycle.ViewModel
 import com.laubetech.comiccovers.BuildConfig
 import com.laubetech.comiccovers.ComicApp
 import com.laubetech.comiccovers.models.ComicData
+import com.laubetech.comiccovers.models.MarvelAPIService
 import com.laubetech.comiccovers.models.MarvelComicsAPI
 import com.laubetech.comiccovers.models.data.Comic
 import com.laubetech.comiccovers.models.data.ComicRepository
+import com.laubetech.comiccovers.models.response.MarvelResponse
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 
 
 class MainViewModel: ViewModel() {
@@ -20,6 +26,8 @@ class MainViewModel: ViewModel() {
     var currentComicData = MutableLiveData<ComicData>()
 
     var targetComic  = MutableLiveData<Comic>()
+
+    private val disposable = CompositeDisposable()
 
     private var lastComicId : String
 
@@ -38,6 +46,26 @@ class MainViewModel: ViewModel() {
 
         val returnedList = repository.find(lastComicId)
         targetComic.value = returnedList.value?.get(0)
+    }
+
+    fun downloadIssueInfoViaRetro(){
+        val apiRequest = MarvelAPIService(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY)
+        disposable.add(
+            apiRequest.getComic(lastComicId)
+                .subscribeOn(Schedulers.newThread() )
+                .observeOn(AndroidSchedulers.mainThread() )
+                .subscribeWith(object: DisposableSingleObserver<MarvelResponse>() {
+                    override fun onSuccess(t: MarvelResponse) {
+                        val comic = ComicData(t)
+                        currentComicData.value = comic
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+
+                })
+        )
     }
 
     fun downloadIssueInfo(){
@@ -60,7 +88,8 @@ class MainViewModel: ViewModel() {
         val comicDetails = targetComic.value
         if (comicDetails == null){
             Log.d("MainViewModel","DB load failed, trying to load from server")
-            downloadIssueInfo()
+           // downloadIssueInfo()
+            downloadIssueInfoViaRetro()
         }else {
             updateImage(comicDetails!!.issueId)
             return comicDetails.toString()
